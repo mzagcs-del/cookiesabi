@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda | Galletas de Abigail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa-pastel: #FFC1CC;
+            --rosa-claro: #FFF5F7;
+            --rosa-fuerte: #E91E63;
+            --texto-oscuro: #5D4037;
+            --blanco: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--rosa-claro);
+            color: var(--texto-oscuro);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px; /* Espacio para el botón del carrito */
+        }
+
+        /* Encabezado */
+        header { 
+            padding: 3rem 2rem; 
+            background: var(--rosa-pastel); 
+            text-align: center;
+            border-bottom: 5px solid var(--blanco);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--texto-oscuro);
+            margin: 0;
+        }
+
+        /* Cuadrícula de productos */
+        .menu-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .menu-section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            text-align: center;
+            color: var(--rosa-fuerte);
+            margin-bottom: 30px;
+            border-bottom: 2px dashed var(--rosa-pastel);
+            padding-bottom: 10px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .menu-item {
+            background: var(--blanco);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--rosa-pastel);
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(255, 193, 204, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Imágenes de las galletas */
+        .producto-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 2px solid var(--rosa-claro);
+        }
+
+        .menu-item h3 {
+            font-size: 1.4rem;
+            color: var(--rosa-fuerte);
+            margin-top: 0;
+        }
+
+        .menu-item p {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: #7A5C53;
+            flex-grow: 1; /* Empuja el botón hacia abajo */
+        }
+
+        .price {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--texto-oscuro);
+            margin: 10px 0;
+        }
+
+        /* Botones */
+        .btn-add {
+            background-color: var(--rosa-pastel);
+            color: var(--texto-oscuro);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            background-color: var(--rosa-fuerte);
+            color: var(--blanco);
+            transform: translateY(-2px);
+        }
+
+        /* Botón flotante del Carrito */
+        .cart-floating {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--rosa-fuerte);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-count {
+            background: white;
+            color: var(--rosa-fuerte);
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 1rem;
+        }
+
+        /* Modal (Ventana del carrito) */
+        .cart-modal {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+        }
+
+        .cart-content {
+            background-color: var(--blanco);
+            width: 90%;
+            max-width: 400px;
+            margin: 50px auto;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--rosa-pastel);
+            padding-bottom: 10px;
+        }
+
+        .close-cart {
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--rosa-fuerte);
+        }
+
+        .cart-items {
+            list-style: none; padding: 0; max-height: 300px; overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px dashed var(--rosa-claro);
+        }
+
+        .btn-remove {
+            background: #ff4d4d; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;
+        }
+
+        .cart-total {
+            font-size: 1.3rem; font-weight: bold; text-align: right; margin-top: 15px; color: var(--texto-oscuro);
+        }
+
+        .btn-checkout {
+            display: block; width: 100%; background-color: var(--rosa-fuerte); color: white;
+            text-align: center; padding: 15px; border-radius: 25px; margin-top: 20px;
+            font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer;
+        }
+
+        footer { text-align: center; padding: 20px; background-color: var(--rosa-pastel); color: var(--texto-oscuro); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Galletas by Abigail Perez</h1>
+        <p>Repostería Artesanal • Horneadas con amor</p>
+    </header>
+
+    <main class="menu-container">
+        
+        <h2 class="menu-section-title">Nuestras Galletas</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Galleta+Avena" alt="Galleta de Avena" class="producto-img">
+                <h3>🍪 Avena</h3>
+                <p>Nutritivas, crujientes por fuera y suavecitas por dentro.</p>
+                <div class="price">Bs. 8</div>
+                <button class="btn-add" onclick="agregarAlCarrito('Galleta de Avena', 8)">Añadir al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Galleta+Mantequilla" alt="Galleta de Mantequilla" class="producto-img">
+                <h3>🍪 Mantequilla</h3>
+                <p>Nuestra receta clásica que se deshace en tu boca.</p>
+                <div class="price">Bs. 8</div>
+                <button class="btn-add" onclick="agregarAlCarrito('Galleta de Mantequilla', 8)">Añadir al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Red+Velvet" alt="Red Velvet" class="producto-img">
+                <h3>❤️ Red Velvet</h3>
+                <p>El toque elegante con un delicado sabor a cacao y crema.</p>
+                <div class="price">Bs. 10</div>
+                <button class="btn-add" onclick="agregarAlCarrito('Galleta Red Velvet', 10)">Añadir al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Oreo" alt="Oreo" class="producto-img">
+                <h3>🖤 Oreo</h3>
+                <p>Combinación perfecta para las amantes del chocolate y la vainilla.</p>
+                <div class="price">Bs. 10</div>
+                <button class="btn-add" onclick="agregarAlCarrito('Galleta Oreo', 10)">Añadir al carrito</button>
+            </div>
+        </div>
+
+        <h2 class="menu-section-title">Packs Especiales</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Caja+Duo" alt="Pack Duo" class="producto-img">
+                <h3>Pack Dúo Perfecto</h3>
+                <p>6 Galletas surtidas a tu elección.</p>
+                <div class="price">Bs. 45</div>
+                <button class="btn-add" onclick="agregarAlCarrito('Pack Dúo (6 galletas)', 45)">Añadir al carrito</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Caja+Familiar" alt="Pack Familiar" class="producto-img">
+                <h3>Pack Familiar</h3>
+                <p>12 Galletas (Mix de todos nuestros sabores).</p>
+                <div class="price">Bs. 85</div>
+                <button class="btn-add" onclick="agregarAlCarrito('Pack Familiar (12 galletas)', 85)">Añadir al carrito</button>
+            </div>
+        </div>
+
+    </main>
+
+    <button class="cart-floating" onclick="toggleCarrito()">
+        🛒 Ver Pedido <span class="cart-count" id="contador-carrito">0</span>
+    </button>
+
+    <div class="cart-modal" id="modal-carrito">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Tu Pedido</h2>
+                <button class="close-cart" onclick="toggleCarrito()">✖</button>
+            </div>
+            <ul class="cart-items" id="lista-carrito">
+                </ul>
+            <div class="cart-total">
+                Total: Bs. <span id="total-carrito">0</span>
+            </div>
+            <button class="btn-checkout" onclick="enviarPedidoIG()">📲 Enviar pedido por Instagram</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Galletas de Abigail. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let carrito = [];
+
+        function agregarAlCarrito(nombre, precio) {
+            carrito.push({ nombre, precio });
+            actualizarUI();
+            
+            // Pequeña animación visual en el botón flotante
+            const btnCart = document.querySelector('.cart-floating');
+            btnCart.style.transform = 'scale(1.1)';
+            setTimeout(() => btnCart.style.transform = 'scale(1)', 200);
+        }
+
+        function eliminarDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarUI();
+        }
+
+        function actualizarUI() {
+            const lista = document.getElementById('lista-carrito');
+            const totalEtiq = document.getElementById('total-carrito');
+            const contador = document.getElementById('contador-carrito');
+            
+            lista.innerHTML = '';
+            let total = 0;
+
+            carrito.forEach((item, index) => {
+                total += item.precio;
+                lista.innerHTML += `
+                    <li class="cart-item">
+                        <span>${item.nombre}</span>
+                        <span>Bs. ${item.precio} <button class="btn-remove" onclick="eliminarDelCarrito(${index})">X</button></span>
+                    </li>
+                `;
+            });
+
+            totalEtiq.innerText = total;
+            contador.innerText = carrito.length;
+
+            if(carrito.length === 0) {
+                lista.innerHTML = '<p style="text-align:center; color:#A0A0A0;">Tu carrito está vacío 🥺</p>';
+            }
+        }
+
+        function toggleCarrito() {
+            const modal = document.getElementById('modal-carrito');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            if (modal.style.display === 'block') actualizarUI();
+        }
+
+        function enviarPedidoIG() {
+            if(carrito.length === 0) {
+                alert("Agrega algunas galletitas a tu carrito primero 💕");
+                return;
+            }
+
+            let textoPedido = "¡Hola Abigail! 💖 Me encantaría hacer el siguiente pedido:\n\n";
+            
+            carrito.forEach(item => {
+                textoPedido += `🍪 1x ${item.nombre} - Bs. ${item.precio}\n`;
+            });
+            
+            let total = carrito.reduce((sum, item) => sum + item.precio, 0);
+            textoPedido += `\n*TOTAL: Bs. ${total}*\n\n¡Quedo atenta a los detalles de pago y entrega! ✨`;
+
+            // Copiar al portapapeles y redirigir
+            navigator.clipboard.writeText(textoPedido).then(() => {
+                alert("✅ ¡Tu pedido se ha copiado automáticamente!\n\nAhora te llevaremos a Instagram. Solo tienes que 'PEGAR' el mensaje en el chat y enviarlo. 💌");
+                window.open("https://ig.me/m/abigailperezz.m", "_blank");
+            }).catch(err => {
+                // Por si el navegador bloquea el portapapeles
+                alert("Hubo un error copiando el texto. Por favor toma captura de tu carrito y envíala al Instagram @abigailperezz.m");
+                window.open("https://ig.me/m/abigailperezz.m", "_blank");
+            });
+        }
+    </script>
+</body>
+</html>
