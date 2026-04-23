@@ -201,10 +201,16 @@
             font-size: 1.3rem; font-weight: bold; text-align: right; margin-top: 15px; color: var(--texto-oscuro);
         }
 
+        /* Botón de WhatsApp */
         .btn-checkout {
-            display: block; width: 100%; background-color: var(--rosa-fuerte); color: white;
+            display: block; width: 100%; background-color: #25D366; /* Color oficial de WhatsApp */
+            color: white;
             text-align: center; padding: 15px; border-radius: 25px; margin-top: 20px;
             font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer;
+        }
+
+        .btn-checkout:hover {
+            background-color: #128C7E;
         }
 
         footer { text-align: center; padding: 20px; background-color: var(--rosa-pastel); color: var(--texto-oscuro); }
@@ -222,28 +228,28 @@
         <h2 class="menu-section-title">Nuestras Galletas</h2>
         <div class="menu-grid">
             <div class="menu-item">
-                <img src="im1.jpg" alt="Galleta de Avena" class="producto-img">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Galleta+Avena" alt="Galleta de Avena" class="producto-img">
                 <h3>🍪 Avena</h3>
                 <p>Nutritivas, crujientes por fuera y suavecitas por dentro.</p>
                 <div class="price">Bs. 8</div>
                 <button class="btn-add" onclick="agregarAlCarrito('Galleta de Avena', 8)">Añadir al carrito</button>
             </div>
             <div class="menu-item">
-                <img src="im4.jpg" alt="Galleta de Mantequilla" class="producto-img">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Galleta+Mantequilla" alt="Galleta de Mantequilla" class="producto-img">
                 <h3>🍪 Mantequilla</h3>
                 <p>Nuestra receta clásica que se deshace en tu boca.</p>
                 <div class="price">Bs. 8</div>
                 <button class="btn-add" onclick="agregarAlCarrito('Galleta de Mantequilla', 8)">Añadir al carrito</button>
             </div>
             <div class="menu-item">
-                <img src="im2.jpg" alt="Red Velvet" class="producto-img">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Red+Velvet" alt="Red Velvet" class="producto-img">
                 <h3>❤️ Red Velvet</h3>
                 <p>El toque elegante con un delicado sabor a cacao y crema.</p>
                 <div class="price">Bs. 10</div>
                 <button class="btn-add" onclick="agregarAlCarrito('Galleta Red Velvet', 10)">Añadir al carrito</button>
             </div>
             <div class="menu-item">
-                <img src="im3.jpg" alt="Oreo" class="producto-img">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Oreo" alt="Oreo" class="producto-img">
                 <h3>🖤 Oreo</h3>
                 <p>Combinación perfecta para las amantes del chocolate y la vainilla.</p>
                 <div class="price">Bs. 10</div>
@@ -254,14 +260,14 @@
         <h2 class="menu-section-title">Packs Especiales</h2>
         <div class="menu-grid">
             <div class="menu-item">
-                <img src="im6.jpg" alt="Pack Duo" class="producto-img">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Caja+Duo" alt="Pack Duo" class="producto-img">
                 <h3>Pack Dúo Perfecto</h3>
                 <p>6 Galletas surtidas a tu elección.</p>
                 <div class="price">Bs. 45</div>
                 <button class="btn-add" onclick="agregarAlCarrito('Pack Dúo (6 galletas)', 45)">Añadir al carrito</button>
             </div>
             <div class="menu-item">
-                <img src="im5.jpg" alt="Pack Familiar" class="producto-img">
+                <img src="https://via.placeholder.com/300x200/FFC1CC/5D4037?text=Foto+Caja+Familiar" alt="Pack Familiar" class="producto-img">
                 <h3>Pack Familiar</h3>
                 <p>12 Galletas (Mix de todos nuestros sabores).</p>
                 <div class="price">Bs. 85</div>
@@ -286,7 +292,7 @@
             <div class="cart-total">
                 Total: Bs. <span id="total-carrito">0</span>
             </div>
-            <button class="btn-checkout" onclick="enviarPedidoIG()">📲 Enviar pedido por Instagram</button>
+            <button class="btn-checkout" onclick="enviarPedidoWhatsApp()">📲 Enviar pedido por WhatsApp</button>
         </div>
     </div>
 
@@ -301,7 +307,6 @@
             carrito.push({ nombre, precio });
             actualizarUI();
             
-            // Pequeña animación visual en el botón flotante
             const btnCart = document.querySelector('.cart-floating');
             btnCart.style.transform = 'scale(1.1)';
             setTimeout(() => btnCart.style.transform = 'scale(1)', 200);
@@ -344,7 +349,8 @@
             if (modal.style.display === 'block') actualizarUI();
         }
 
-        function enviarPedidoIG() {
+        // Nueva función adaptada para WhatsApp
+        function enviarPedidoWhatsApp() {
             if(carrito.length === 0) {
                 alert("Agrega algunas galletitas a tu carrito primero 💕");
                 return;
@@ -359,15 +365,17 @@
             let total = carrito.reduce((sum, item) => sum + item.precio, 0);
             textoPedido += `\n*TOTAL: Bs. ${total}*\n\n¡Quedo atenta a los detalles de pago y entrega! ✨`;
 
-            // Copiar al portapapeles y redirigir
-            navigator.clipboard.writeText(textoPedido).then(() => {
-                alert("✅ ¡Tu pedido se ha copiado automáticamente!\n\nAhora te llevaremos a Instagram. Solo tienes que 'PEGAR' el mensaje en el chat y enviarlo. 💌");
-                window.open("https://ig.me/m/abigailperezz.m", "_blank");
-            }).catch(err => {
-                // Por si el navegador bloquea el portapapeles
-                alert("Hubo un error copiando el texto. Por favor toma captura de tu carrito y envíala al Instagram @abigailperezz.m");
-                window.open("https://ig.me/m/abigailperezz.m", "_blank");
-            });
+            // Número de WhatsApp (sin el signo +)
+            const numeroWhatsApp = "59171077415";
+            
+            // Convertimos el texto para que sea compatible con una URL
+            const textoCodificado = encodeURIComponent(textoPedido);
+            
+            // Creamos el enlace a la API de WhatsApp
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${textoCodificado}`;
+            
+            // Abrimos WhatsApp en una nueva pestaña
+            window.open(urlWhatsApp, "_blank");
         }
     </script>
 </body>
